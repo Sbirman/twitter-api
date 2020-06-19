@@ -1,9 +1,10 @@
 # app/apis/tweets.py
 
 from flask_restx import Namespace, Resource, fields
-from app.db import tweet_repository
+from app.models import Tweet
+from app import db
 
-print ("tweet_repository.tweets", tweet_repository.tweets)
+#print ("tweet_repository.tweets", tweet_repository.tweets)
 
 api = Namespace('tweets')
 
@@ -19,7 +20,8 @@ tweet = api.model('Tweet', {
 class TweetResource(Resource):
     @api.marshal_with(tweet)
     def get(self, id):
-        tweet = tweet_repository.get(id)
+        #tweet = tweet_repository.get(id)
+        tweet = db.session.query(Tweet).get(id)
         print("tweet", tweet)
         if tweet is None:
             api.abort(404)
